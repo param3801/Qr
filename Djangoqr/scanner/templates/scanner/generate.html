@@ -1,0 +1,75 @@
+{% extends "core/base.html" %}
+{% block style %}
+/* Center the form in the middle of the page */
+.form{
+    height: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.form-container {
+    width: 100%;
+    max-width: 400px;
+}
+{% endblock style %}
+{% block content%}
+    <!-- Form -->
+  <div class="form">
+    <div class="container form-container">
+        <form action="{% url "generate" %}" method="POST"class="shadow p-5" >
+          {% csrf_token %}
+            <h3 class="text-center">User Form</h3>
+            
+            <!-- Mobile Number Field -->
+            <div class="mb-3">
+                <label for="mobile" class="form-label">Mobile Number</label>
+                <input type="text" class="form-control" id="mobile" name="mobile" required 
+                    pattern="^\d{10}$" title="Mobile number must be exactly 10 digits">
+                <div class="invalid-feedback">
+                    Please enter a valid 10-digit mobile number.
+                </div>
+            </div>
+
+            <!-- Text Field -->
+            <div class="mb-3">
+                <label for="textField" class="form-label">Text Field</label>
+                <input type="text" class="form-control" id="textField" name="textField" required>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary w-100">Submit</button>
+        </form>
+        <div class="shadow p-3">
+            {% if  qr_image_url  %}
+            <h2 class="text-center"> QR code image</h2>
+            <img src="{{ qr_image_url }}" alt="Generate QR code">
+            <br>
+            <a  href="{{ qr_image_url }}" download class="btn btn-primary">Scan QR </a>
+            {% endif %}
+        </div>
+    </div>
+   
+  </div> 
+
+    <script>
+        // Enable Bootstrap 5 form validation
+        (function () {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
+
+
+
+{% endblock content%}

@@ -1,0 +1,74 @@
+{% extends "core/base.html" %}
+{% block title %} Scanner Page {% endblock title %} Scanner Page 
+{% block style %}
+.form{
+  height: 100%;
+  margin: 0;
+  padding:10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.form-container {
+  width: 100%;
+  max-width: 400px;
+}
+
+{% endblock style %}
+{% block content %}
+
+<div class="form ">
+<div class="form-container shadow p-3">
+  <form action="{% url "scan" %}" method="post" enctype="multipart/form-data" class=" p-5">
+    {% csrf_token %}
+    <h3 class="text-center">Scanner Form</h3>
+
+    <div class="mb-3 ps-3">
+      <label for="mobile" class="form-label">Mobile Number</label>
+      <input type="text" class="form-control" id="mobile" name="mobile" placeholder="Enter mobile number" required pattern="^\d{10}$" title="Mobile number must be 10 digits">
+      <div class="invalid-feedback">
+        Please enter a valid 10-digit mobile number.
+      </div>
+    </div>
+
+    <div class="mb-3 ps-3">
+      <label for="image" class="form-label ">Upload Image</label>
+      <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
+      <div class="invalid-feedback">
+        Please upload an image.
+      </div>
+      <br>
+      <img id="imageDisplay" src="" alt="Selected Image" style="display:none; margin-top: 20px; max-width: 100%;">
+  
+      <script>
+          // Get the file input and image display elements
+          const fileInput = document.getElementById('image');
+          const imageDisplay = document.getElementById('imageDisplay');
+  
+          // Add an event listener to the file input
+          fileInput.addEventListener('change', function(event) {
+              const file = event.target.files[0];
+              
+              if (file) {
+                  // Create a URL for the image file and set it as the src for the img element
+                  const objectURL = URL.createObjectURL(file);
+                  imageDisplay.src = objectURL;
+                  
+                  // Display the image
+                  imageDisplay.style.display = 'block';
+              } else {
+                  imageDisplay.style.display = 'none';
+              }
+          });
+      </script>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Scan</button>
+  </form>
+  <h2>{{result}}</h2>
+</div>
+</div>
+
+
+
+{% endblock content %}
